@@ -76,17 +76,9 @@ public class SimpleCandlestickChart : MonoBehaviour
             return;
         }
 
-        // 過去のローソク足を仮生成
-        float savedPrice = CurrentPrice;
-
-        for (int i = 0; i < maxCandles - 1; i++)
-        {
-            CreateHistoricalCandle();
-        }
-
-        // 過去足の生成による価格変更を戻す
-        // 実際の株価はStockPriceSimulatorが管理する
-        StartNewCandleAt(savedPrice);
+        // ゲーム開始時点ではローソク足を1本だけ表示
+        candles.Clear();
+        StartNewCandleAt(CurrentPrice);
 
         stockSimulator.OnPriceUpdated += OnPriceUpdated;
 
@@ -174,10 +166,7 @@ public class SimpleCandlestickChart : MonoBehaviour
             close = price
         });
 
-        while (candles.Count > maxCandles)
-        {
-            candles.RemoveAt(0);
-        }
+      
 
         DrawChart();
     }
@@ -204,10 +193,7 @@ public class SimpleCandlestickChart : MonoBehaviour
 
         float step = candleWidth + candleGap;
 
-        // 最新の足を右端側に配置
-        float startX = width / 3f
-            - candleWidth / 3f
-            - (candles.Count - 1) * step;
+        float startX = -width / 2f + candleWidth / 2f;
 
         for (int i = 0; i < candles.Count; i++)
         {
